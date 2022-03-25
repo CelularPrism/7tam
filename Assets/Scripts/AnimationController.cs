@@ -37,6 +37,16 @@ public class AnimationController : MonoBehaviour
         spriteRenderer.sprite = nowSprites[3];
     }
 
+    public void Normal()
+    {
+        nowSprites = spritesNormal;
+    }
+
+    public void Angry()
+    {
+        nowSprites = spritesAngry;
+    }
+
     public void Hit()
     {
         nowSprites = spritesDirty;
