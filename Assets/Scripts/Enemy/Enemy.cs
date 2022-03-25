@@ -4,15 +4,16 @@ using UnityEngine;
 [RequireComponent(typeof(HealthSystem))]
 [RequireComponent(typeof(AnimationController))]
 [RequireComponent(typeof(MovementEnemy))]
+[RequireComponent(typeof(BattleEnemy))]
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private LayerMask playerMask;
     [SerializeField] private float radius;
-    [SerializeField] private float damage;
     [SerializeField] private float timeReloadDirty;
 
     private HealthSystem healthSystem;
     private MovementEnemy movementEnemy;
+    private BattleEnemy battleEnemy;
     private AnimationController animationController;
 
     private bool dirty;
@@ -23,6 +24,7 @@ public class Enemy : MonoBehaviour
         healthSystem = GetComponent<HealthSystem>();
         animationController = GetComponent<AnimationController>();
         movementEnemy = GetComponent<MovementEnemy>();
+        battleEnemy = GetComponent<BattleEnemy>();
         dirty = false;
     }
 
@@ -31,10 +33,11 @@ public class Enemy : MonoBehaviour
         Collider2D collider = Physics2D.OverlapCircle(transform.position, radius, playerMask);
         if (collider != null)
         {
-            collider.transform.GetComponent<HealthSystem>().Hit(damage);
             movementEnemy.isMove = false;
             animationController.Angry();
             movementEnemy.CheckMove(collider.transform.position);
+            movementEnemy.SetAnimationMove();
+            battleEnemy.DamagePlayer(collider.transform.GetComponent<HealthSystem>());
         } else
         {
             movementEnemy.isMove = true;
@@ -48,6 +51,12 @@ public class Enemy : MonoBehaviour
         {
             dirty = false;
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawSphere(transform.position, radius);
     }
 
     public void Hit(float damage)

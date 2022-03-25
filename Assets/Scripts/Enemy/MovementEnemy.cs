@@ -9,7 +9,6 @@ public class MovementEnemy : MonoBehaviour
 
     [SerializeField] private float speed;
 
-    
     public bool isMove;
 
     private Vector3 nowPoint;
@@ -39,7 +38,21 @@ public class MovementEnemy : MonoBehaviour
         }
     }
 
-    private void SetAnimationMove()
+    private void FindPoint()
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, radius, pointMask);
+        int randIndex = Random.Range(0, colliders.Length);
+
+        nowPoint = colliders[randIndex].transform.position;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(transform.position, radius);
+    }
+
+    public void SetAnimationMove()
     {
         if (moveUp == -1)
         {
@@ -60,25 +73,18 @@ public class MovementEnemy : MonoBehaviour
         }
     }
 
-    private void FindPoint()
-    {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, radius, pointMask);
-        int randIndex = Random.Range(0, colliders.Length);
-
-        nowPoint = colliders[randIndex].transform.position;
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawSphere(transform.position, radius);
-    }
-
     public void CheckMove(Vector3 position)
     {
         Vector3 nowPos = transform.position;
 
-        moveUp = nowPos.y < nowPoint.y ? 1 : (nowPos.y == position.y ? 0 : -1);
-        moveRight = nowPos.x < nowPoint.x ? 1 : (nowPos.x == position.x ? 0 : -1);
+        if (nowPos.y == nowPoint.y && nowPos.x != nowPoint.x)
+        {
+            moveUp = 0;
+            moveRight = nowPos.x < nowPoint.x ? 1 : (nowPos.x == position.x ? 0 : -1);
+        } else
+        {
+            moveUp = nowPos.y < nowPoint.y ? 1 : (nowPos.y == position.y ? 0 : -1);
+            moveRight = 0;
+        }
     }
 }
