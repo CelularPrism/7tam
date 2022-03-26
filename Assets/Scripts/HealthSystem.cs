@@ -14,6 +14,18 @@ public class HealthSystem : MonoBehaviour
         health = maxHealth;
     }
 
+    public void Heal(int health)
+    {
+        if (isLive)
+        {
+            while (health > 0 && this.health < maxHealth)
+            {
+                this.health++;
+                health--;
+            }
+        }
+    }
+
     public void Hit(float damage)
     {
         health -= damage;

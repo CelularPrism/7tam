@@ -1,12 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[RequireComponent(typeof(SceneManage))]
+[RequireComponent(typeof(ManagerScene))]
 public class SceneController : MonoBehaviour
 {
     [SerializeField] private HealthSystem[] healthSystems;
 
-    private SceneManage sceneManager;
+    private ManagerScene sceneManager;
+
+    private void Start()
+    {
+        sceneManager = GetComponent<ManagerScene>();
+    }
+
     void FixedUpdate()
     {
         int countRip = 0;

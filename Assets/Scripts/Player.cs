@@ -2,18 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 [RequireComponent(typeof(HealthSystem))]
+[RequireComponent(typeof(BombSpawner))]
 public class Player : MonoBehaviour
 {
-    [SerializeField] private GameObject prefabBomb;
-    [SerializeField] private HealthSystem healthSystem;
     [SerializeField] private SceneController sceneController;
     [SerializeField] private int countBomb;
 
     private GameObject[] bombs;
+    private HealthSystem healthSystem;
+    private BombSpawner bombSpawner;
 
     private void Start()
     {
         healthSystem = GetComponent<HealthSystem>();
+        bombSpawner = GetComponent<BombSpawner>();
         bombs = new GameObject[countBomb];
     }
 
@@ -28,6 +30,17 @@ public class Player : MonoBehaviour
     public void ChangeCountBomb(int count)
     {
         countBomb += count;
+        bombs = new GameObject[countBomb];
+    }
+
+    public void ChangeDamageBomb(float damage)
+    {
+        bombSpawner.damage += damage;
+    }
+
+    public void ChangeSizeBomb(float point)
+    {
+        bombSpawner.sizePoint += point;
     }
 
     public void SpawnBomb()
@@ -36,7 +49,7 @@ public class Player : MonoBehaviour
         {
             if (bombs[i] == null)
             {
-                bombs[i] = Instantiate(prefabBomb, transform.position, new Quaternion(0f, 0f, 0f, 0f));
+                bombSpawner.SpawnBomb();
                 return;
             }
         }
