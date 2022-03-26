@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private GameObject prefabBomb;
     [SerializeField] private HealthSystem healthSystem;
+    [SerializeField] private SceneController sceneController;
     [SerializeField] private int countBomb;
 
     private GameObject[] bombs;
@@ -20,13 +21,13 @@ public class Player : MonoBehaviour
     {
         if (!healthSystem.isLive)
         {
-            Debug.Log("Lose");
+            sceneController.EndGame();
         }
     }
 
-    public void ChangeCountBomb()
+    public void ChangeCountBomb(int count)
     {
-
+        countBomb += count;
     }
 
     public void SpawnBomb()

@@ -30,26 +30,33 @@ public class Enemy : MonoBehaviour
 
     void FixedUpdate()
     {
-        Collider2D collider = Physics2D.OverlapCircle(transform.position, radius, playerMask);
-        if (collider != null)
+        if (healthSystem.isLive)
         {
-            movementEnemy.isMove = false;
-            animationController.Angry();
-            movementEnemy.CheckMove(collider.transform.position);
-            movementEnemy.SetAnimationMove();
-            battleEnemy.DamagePlayer(collider.transform.GetComponent<HealthSystem>());
+            Collider2D collider = Physics2D.OverlapCircle(transform.position, radius, playerMask);
+            if (collider != null)
+            {
+                movementEnemy.isMove = false;
+                animationController.Angry();
+                movementEnemy.CheckMove(collider.transform.position);
+                movementEnemy.SetAnimationMove();
+                battleEnemy.DamagePlayer(collider.transform.GetComponent<HealthSystem>());
+            }
+            else
+            {
+                movementEnemy.isMove = true;
+                if (dirty)
+                    animationController.Hit();
+                else
+                    animationController.Normal();
+            }
+
+            if (timeDirty + timeReloadDirty < Time.time)
+            {
+                dirty = false;
+            }
         } else
         {
-            movementEnemy.isMove = true;
-            if (dirty)
-                animationController.Hit();
-            else
-                animationController.Normal();
-        }
-
-        if (timeDirty + timeReloadDirty < Time.time)
-        {
-            dirty = false;
+            movementEnemy.isMove = false;
         }
     }
 
