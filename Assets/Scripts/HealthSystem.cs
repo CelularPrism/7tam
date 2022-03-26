@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class HealthSystem : MonoBehaviour
 {
-    [SerializeField] private float health;
+    public float maxHealth;
+    public float health;
     public bool isLive;
 
     private void Start()
     {
         isLive = true;
+        health = maxHealth;
     }
 
     public void Hit(float damage)
@@ -18,7 +20,7 @@ public class HealthSystem : MonoBehaviour
         if (health <= 0)
         {
             isLive = false;
-            Debug.Log("Dead");
+            health = 0;
         }
     }
 }

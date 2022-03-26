@@ -19,6 +19,7 @@ public class BattleEnemy : MonoBehaviour
         if (timeHit + timeReloadHit < Time.time)
         {
             healthSystem.Hit(damage);
+            timeHit = Time.time;
         }
     }
 }
